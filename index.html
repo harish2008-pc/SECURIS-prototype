@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Securis — Intelligent Banking & Proactive Guardian Shield</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            securis: {
+              primary: '#0ea5e9',
+              shield: '#10b981',
+              warning: '#f59e0b',
+              danger: '#ef4444',
+              dark: '#090d16',
+              card: '#111827',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body id="securis-body" class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-sky-500 selection:text-white">
+
+  <!-- ========================================================================= -->
+  <!-- TOP APP BAR & ROLE SWITCHER                                               -->
+  <!-- ========================================================================= -->
+  <header class="border-b border-slate-800 bg-slate-900/95 backdrop-blur-md sticky top-0 z-50 px-3 sm:px-6 py-3 shadow-lg">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 via-indigo-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-sky-500/20">
+          <i class="fa-solid fa-shield-halved text-xl text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl font-black tracking-tight text-white">SECURIS</span>
+            <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">v1.3 Suite</span>
+          </div>
+          <p class="text-[11px] text-slate-400 hidden sm:block">Proactive Digital Financial Protection Platform</p>
+        </div>
+      </div>
+
+      <!-- VIEW / ROLE SELECTOR -->
+      <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <button id="nav-btn-user" onclick="switchView('user')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 bg-emerald-600 text-white shadow-md">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Customer (Senior UI)</span>
+        </button>
+        <button id="nav-btn-guardian" onclick="switchView('guardian')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Guardian Portal</span>
+        </button>
+        <button id="nav-btn-dual" onclick="switchView('dual')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center space-x-1.5 text-slate-400 hover:text-white">
+          <i class="fa-solid fa-table-columns"></i>
+          <span>Dual View</span>
+        </button>
+      </div>
+
+      <!-- CONTROLLER TOOLBAR: VOICE AI, FRAUD TRIGGERS & SIMULATORS -->
+      <div class="flex items-center flex-wrap gap-2">
+        
+        <!-- Live AI Voice Chat Button -->
+        <button onclick="openMiniSecurisChatModal()" class="px-2.5 py-1.5 rounded-lg text-xs font-black bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 text-white shadow-lg shadow-indigo-900/40 border border-indigo-400/40 transition flex items-center animate-pulse" title="Talk or chat with Mini Securis AI">
+          <i class="fa-solid fa-headset mr-1.5"></i> Talk to AI
+        </button>
+
+        <!-- Scenario: Safe <=10k -->
+        <button onclick="triggerScenario('safe')" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 transition flex items-center" title="Under 10k: Direct Biometric Approval">
+          <i class="fa-solid fa-circle-check mr-1 text-emerald-400"></i> ≤₹10k
+        </button>
+
+        <!-- Scenario: >10k Guardian Co-Sign -->
+        <button onclick="triggerScenario('over10k')" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-amber-950/60 hover:bg-amber-900 text-amber-300 border border-amber-500/40 transition flex items-center" title="Over 10k: Requires Guardian Approval">
+          <i class="fa-solid fa-user-check mr-1 text-amber-400"></i> >₹10k
+        </button>
+
+        <!-- Scenario: >50k Single Guardian OTP -->
+        <button onclick="triggerScenario('over50k')" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-500/40 transition flex items-center" title="Over 50k: Requires Single Guardian OTP">
+          <i class="fa-solid fa-key mr-1 text-rose-400"></i> >₹50k (OTP)
+        </button>
+
+        <!-- Simulator: Screen-Sharing Detector -->
+        <button id="btn-screenshare-toggle" onclick="toggleScreenShareSimulator()" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center" title="Simulate AnyDesk/TeamViewer Screen Sharing">
+          <i id="screenshare-icon" class="fa-solid fa-desktop mr-1 text-slate-400"></i>
+          <span id="screenshare-text">AnyDesk: Off</span>
+        </button>
+
+        <!-- Simulator: Night-Time Mode -->
+        <button id="btn-nightmode-toggle" onclick="toggleNightTimeMode()" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center" title="Simulate late-night panic transfer cool-down (11 PM - 6 AM)">
+          <i id="nightmode-icon" class="fa-solid fa-moon mr-1 text-slate-400"></i>
+          <span id="nightmode-text">Night: Off</span>
+        </button>
+
+        <!-- Active Call Toggle -->
+        <button id="btn-call-toggle" onclick="toggleActiveCall()" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center">
+          <i id="call-icon" class="fa-solid fa-phone-slash mr-1 text-slate-400"></i>
+          <span id="call-text">Call: Off</span>
+        </button>
+
+        <!-- View Receipt Button -->
+        <button onclick="openLastTransactionReceipt()" class="px-2 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-sky-400 border border-sky-500/30 transition flex items-center" title="View official bank receipt for last transfer">
+          <i class="fa-solid fa-receipt mr-1"></i> Receipt
+        </button>
+
+        <!-- Onboarding Tour -->
+        <button onclick="openOnboardingTour()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition" title="Start Senior Onboarding Tour">
+          <i class="fa-solid fa-circle-question"></i>
+        </button>
+
+        <!-- Contrast Toggle -->
+        <button onclick="toggleUltraContrast()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-400 hover:text-white transition" title="Toggle Ultra High-Contrast Mode">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </button>
+
+        <!-- Language Selector -->
+        <select id="lang-select" onchange="changeLanguage(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 outline-none focus:ring-1 focus:ring-sky-500">
+          <option value="en-US">🗣️ English</option>
+          <option value="hi-IN">🗣️ हिन्दी</option>
+          <option value="te-IN">🗣️ తెలుగు</option>
+          <option value="es-ES">🗣️ Español</option>
+        </select>
+
+        <!-- Reset Button -->
+        <button onclick="resetSecurisData()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition" title="Reset all data & balance">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN APP CONTAINER                                                        -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 flex flex-col justify-center">
+
+    <!-- VIEW 1: STANDALONE USER / CUSTOMER UI (Senior Citizen / Vulnerable View) -->
+    <section id="view-user-standalone" class="w-full max-w-xl mx-auto flex flex-col items-center">
+      <div id="user-ui-mount" class="w-full"></div>
+    </section>
+
+    <!-- VIEW 2: STANDALONE GUARDIAN COMPANION PORTAL                           -->
+    <section id="view-guardian-standalone" class="hidden w-full max-w-4xl mx-auto">
+      <div id="guardian-ui-mount" class="w-full"></div>
+    </section>
+
+    <!-- VIEW 3: DUAL PRESENTATION VIEW (Side-by-Side Synchronized Simulator)     -->
+    <section id="view-dual-presentation" class="hidden w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start justify-center max-w-6xl mx-auto">
+        <div class="flex flex-col items-center">
+          <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2 flex items-center">
+            <i class="fa-solid fa-user-shield mr-1.5"></i> Customer Device (Grandpa Rao)
+          </div>
+          <div id="user-dual-mount" class="w-full max-w-[390px]"></div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="text-xs font-bold text-sky-400 uppercase tracking-wider mb-2 flex items-center">
+            <i class="fa-solid fa-user-gear mr-1.5"></i> Multi-Guardian Portal (Ramesh & Priya)
+          </div>
+          <div id="guardian-dual-mount" class="w-full max-w-[390px]"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: CONVERSATIONAL AI CHAT MODAL ("TALK TO MINI SECURIS")             -->
+  <!-- ========================================================================= -->
+  <div id="ai-chat-modal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-slate-900 border-2 border-indigo-500/50 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[640px] animate-slide-up">
+      <div class="px-5 py-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-sky-400 flex items-center justify-center text-white text-lg mini-securis-halo">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-white text-base leading-tight">Mini Securis Voice Assistant</h3>
+            <span class="text-[11px] text-emerald-400 font-semibold flex items-center">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 mr-1.5 animate-ping"></span>
+              Live & Listening to Commands
+            </span>
+          </div>
+        </div>
+        <button onclick="closeMiniSecurisChatModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center font-bold">
+          ✕
+        </button>
+      </div>
+
+      <div class="px-4 py-2.5 bg-slate-950/60 border-b border-slate-800/80 flex items-center space-x-2 overflow-x-auto text-xs whitespace-nowrap">
+        <span class="text-[10px] font-bold text-slate-400 uppercase">Quick Actions:</span>
+        <button onclick="sendUserVoiceOrTextMessage('Check my balance')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          💰 Check Balance
+        </button>
+        <button onclick="sendUserVoiceOrTextMessage('Send 500 to Suresh')" class="px-2.5 py-1 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/30 transition">
+          🥛 Send ₹500 to Suresh
+        </button>
+        <button onclick="sendUserVoiceOrTextMessage('Send 15000 to Ramesh')" class="px-2.5 py-1 rounded-lg bg-amber-950/60 hover:bg-amber-900 text-amber-300 border border-amber-500/30 transition">
+          👨‍💼 Send ₹15k to Ramesh
+        </button>
+        <button onclick="sendUserVoiceOrTextMessage('Show last receipt')" class="px-2.5 py-1 rounded-lg bg-sky-950/60 hover:bg-sky-900 text-sky-300 border border-sky-500/30 transition">
+          🧾 Last Receipt
+        </button>
+        <button onclick="sendUserVoiceOrTextMessage('Add new payee')" class="px-2.5 py-1 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/30 transition">
+          ➕ Add Payee
+        </button>
+      </div>
+
+      <div id="ai-chat-history" class="flex-1 p-4 space-y-3 overflow-y-auto text-xs"></div>
+
+      <div id="mic-status-bar" class="hidden px-4 py-2 bg-rose-950/40 border-t border-rose-500/30 text-rose-300 text-xs flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
+          <span class="font-bold">Listening to your voice... Speak now!</span>
+        </div>
+        <button onclick="stopVoiceListening()" class="text-[10px] bg-rose-800 hover:bg-rose-700 text-white px-2 py-0.5 rounded-md font-bold">
+          Done
+        </button>
+      </div>
+
+      <div class="p-3 bg-slate-950 border-t border-slate-800 flex items-center space-x-2">
+        <button id="btn-mic-toggle" onclick="toggleVoiceListening()" class="w-12 h-12 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white flex items-center justify-center text-lg shadow-lg shadow-indigo-950/60 transition shrink-0" title="Tap to speak command">
+          <i id="mic-icon" class="fa-solid fa-microphone"></i>
+        </button>
+        <input type="text" id="ai-chat-input" placeholder="Speak or type: 'Send 500 to Suresh', 'Check balance'..." class="flex-1 bg-slate-900 border border-slate-700 text-white text-xs px-4 py-3 rounded-2xl outline-none focus:border-indigo-500" onkeydown="if(event.key === 'Enter') submitAIChatInput()" />
+        <button onclick="submitAIChatInput()" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition shrink-0">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: OFFICIAL DIGITAL TRANSACTION RECEIPT                               -->
+  <!-- ========================================================================= -->
+  <div id="receipt-modal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div id="receipt-card-mount" class="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl shadow-2xl p-6 relative animate-slide-up">
+      <!-- Content rendered dynamically via showTransactionReceipt() -->
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: INTERACTIVE SENIOR ONBOARDING TOUR                                 -->
+  <!-- ========================================================================= -->
+  <div id="onboarding-modal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div id="onboarding-card-mount" class="w-full max-w-md bg-slate-900 border-2 border-indigo-500/50 rounded-3xl shadow-2xl p-6 relative animate-slide-up text-center">
+      <!-- Content rendered dynamically via openOnboardingTour() -->
+    </div>
+  </div>
+
+  <!-- GLOBAL NOTIFICATION TOAST -->
+  <div id="global-toast" class="fixed bottom-6 right-6 hidden z-50 bg-slate-900 border border-slate-700 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-2.5 animate-slide-up">
+    <div id="toast-icon" class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">✓</div>
+    <span id="toast-message">Notification</span>
+  </div>
+
+  <footer class="border-t border-slate-900 py-3 text-center text-xs text-slate-500">
+    Securis v1.3 • Multi-Guardian Network • Screen-Share Defense • Night-Time Cool-Down • Receipts
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
