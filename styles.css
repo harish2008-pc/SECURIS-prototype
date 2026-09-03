@@ -1,0 +1,76 @@
+/* Custom animations and styling for ShieldBank */
+
+@keyframes scanline {
+  0% {
+    top: 0%;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0.2;
+  }
+}
+
+.scanner-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #10b981, #34d399, transparent);
+  box-shadow: 0 0 15px #10b981;
+  animation: scanline 2s infinite ease-in-out;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 16px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+.biometric-active {
+  animation: pulse-ring 2s infinite;
+}
+
+/* Phone Bezel Realism */
+.phone-frame {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 
+              0 0 0 1px rgba(255, 255, 255, 0.08), 
+              inset 0 0 4px rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth scrolling for mobile viewports */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Accessibility Focus & Senior Mode Large Hitboxes */
+button {
+  touch-action: manipulation;
+  user-select: none;
+}
+button:focus-visible {
+  outline: 2px solid #34d399;
+  outline-offset: 2px;
+}
